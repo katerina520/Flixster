@@ -24,7 +24,7 @@ public class MovieListActivity extends AppCompatActivity {
     // the paramemter name for the API key
     public final static String API_KEY_PARAM = "api_key";
     // the API key -- TODO move
-    public final static String API_KEY = "f5c1e23f995bf777239c87cf84ae41f8";
+
 
     public final static String TAG = "MovieActivity";
 
@@ -54,7 +54,7 @@ public class MovieListActivity extends AppCompatActivity {
         String url = API_BASE_URL + "/configuration";
         // set the request parameters
         RequestParams params = new RequestParams();
-        params.put(API_KEY_PARAM, API_KEY);
+        params.put(API_KEY_PARAM, getString(R.string.api_key));
         // execute a GET request expecting a JSON object response
         client.get(url, params, new JsonHttpResponseHandler()
         {
