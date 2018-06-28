@@ -2,9 +2,12 @@ package com.example.splendidavocado.flixster;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.splendidavocado.flixster.models.Config;
 import com.example.splendidavocado.flixster.models.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -35,14 +38,19 @@ public class MovieListActivity extends AppCompatActivity {
     // instance fields
     AsyncHttpClient client;
 
-    // the base url for loading images
-    String imageBaseUrl;
-    // the poster size to use when fetching images, part of the url
-    String posterSize;
 
 
     // the list of currentply playing movies
     ArrayList<Movie> movies;
+
+    // the recycvler view
+    RecyclerView rvMovies;
+    // adapter wired to thr recycler view
+    MovieAdapter adapter;
+
+
+    // image config
+    Config config;
 
 
 
@@ -55,6 +63,14 @@ public class MovieListActivity extends AppCompatActivity {
 
         // initialize the list of movies
         movies = new ArrayList<>();
+
+        // initialize the adapter, movie array cannot be reitinialized
+        adapter = new MovieAdapter(movies);
+        // resolvce the recycler view and connect a layoyr manager
+        rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
+        rvMovies.setLayoutManager(new LinearLayoutManager(this));
+        rvMovies.setAdapter(adapter);
+
 
         getConfiguration();
 
@@ -82,6 +98,7 @@ public class MovieListActivity extends AppCompatActivity {
                             {
                                 Movie movie = new Movie(results.getJSONObject(i));
                                 movies.add(movie);
+                                adapter.notifyItemInserted(movies.size() - 1);
 
                             }
                             Log.i(TAG, String.format("Loaded %s movies", results.length()));
@@ -113,17 +130,12 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    JSONObject images = response.getJSONObject("images");
+                    config = new Config(response);
 
-                    // get image base url
-                    imageBaseUrl = images.getString("secure_base_url");
-                    // get the pster size
-                    JSONArray posterSizeOptions = images.getJSONArray("poster_sizes");
-                    // use the option at index 3 or w342 as a fallback
-                    posterSize = posterSizeOptions.optString(3, "w342");
+                    Log.i(TAG, String.format("Loaded configuration with imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
 
-                    Log.i(TAG, String.format("Loaded configuration with imageBaseUrl %s and posterSize %s", imageBaseUrl, posterSize));
-
+                    // pass config to adapter
+                    adapter.setConfig(config);
                     getNowPlaying();
                 } catch (JSONException e)
                 {
