@@ -21,6 +21,8 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Viewholder> {
@@ -117,16 +119,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Viewholder> 
         // trsack view objects
         ImageView ivPosterImage;
         ImageView ivBackdropImage;
-        TextView tvTitle;
-        TextView tvOverview;
+
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvOverview) TextView tvOverview;
+
 
         public Viewholder(View itemView) {
             super(itemView);
             // lookup view objects by id
+
+            ButterKnife.bind(this, itemView);
             ivPosterImage = (ImageView) itemView.findViewById(R.id.ivPosterImage);
             ivBackdropImage = (ImageView)  itemView.findViewById(R.id.ivBackdropImage);
-            tvOverview = (TextView) itemView.findViewById(R.id.tvOverview);
-            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+
             itemView.setOnClickListener(this);
 
         }
