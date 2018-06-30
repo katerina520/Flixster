@@ -1,28 +1,44 @@
 package com.example.splendidavocado.flixster;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.splendidavocado.flixster.models.Config;
+import com.example.splendidavocado.flixster.models.GlideApp;
 import com.example.splendidavocado.flixster.models.Movie;
 
 import org.parceler.Parcels;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class MovieDetailsActivity extends AppCompatActivity {
+
+
+ //   Config config;
+ //   Context context;
+ // public void setConfig(Config config) {
+ //       this.config = config;
+ //   }
+
 
     // the movie to display
     Movie movie;
     // the view objects
     TextView tvTitle;
     TextView tvOverview;
+ //   ImageView ivPosterImage;
     RatingBar rbVoteAverage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        // ivPosterImage = (ImageView) findViewById(R.id.ivPosterImage);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
@@ -34,6 +50,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
         // set the title and overview
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
+
+        // String imageUrl = null;
+        // imageUrl = config.getImageUrl("w342", movie.getPosterPath());
+
+
+
+
+
 
         // vote average is 0..10, convert to 0..5 by dividing by 2
         float voteAverage = movie.getVoteAverage().floatValue();
